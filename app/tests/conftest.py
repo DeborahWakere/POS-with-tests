@@ -28,8 +28,6 @@ engine = create_engine(
     poolclass=StaticPool,
 )
 
-# Enable SQLite foreign-key enforcement so relational failures behave like the
-# PostgreSQL development database.
 @event.listens_for(engine, "connect")
 def _enable_sqlite_foreign_keys(dbapi_connection, _connection_record):
     cursor = dbapi_connection.cursor()
