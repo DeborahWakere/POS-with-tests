@@ -1,0 +1,36 @@
+from sqlalchemy.orm import Session
+from app.models.supplier import Supplier
+
+class SupplierRepository:
+    def __init__(self, db: Session | None = None): 
+        self.db = db
+
+
+    def get(self, db: Session, supplier_id: int): 
+        return db.get (Supplier, supplier_id)
+
+    
+    def get_all(self, db:Session): 
+        return db.query(Supplier).all()
+
+
+    def create(self, db:Session, data: dict): 
+        supplier = Supplier(**data) 
+        db.add(supplier)
+        db.commit()
+        db.refresh(supplier)
+        return supplier
+
+    def update(self, db: Session, db_obj: Supplier, data: dict): 
+        for field, value in data.items():
+            setattr(db_obj, field, value) 
+        db.commit()
+        db.refresh(db_obj)
+        return db_obj
+    
+    
+    def delete(self, db:Session, db_obj: Supplier): 
+        db.delete(db_obj)
+        db.commit()
+
+supplier_repository=SupplierRepository() 
